@@ -1,67 +1,103 @@
-/* General Styling */
+/* General Styling for Popup Window */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #2c2f33; /* Dark background */
-    color: #ffffff; /* White text */
-    padding: 20px;
-    width: 250px; /* Set width for popup */
-    margin: 0;
-    box-sizing: border-box;
-    border-radius: 10px; /* Rounded corners for the popup box */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
-  }
-  
-  h2 {
-    color: #7289da; /* Blue highlight color */
-    text-align: center;
-    font-weight: bold;
-    margin-bottom: 15px;
-    font-size: 18px;
-  }
-  
-  /* Input Fields */
-  input[type="password"], input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: none;
-    border-radius: 5px; /* Rounded corners for inputs */
-    background-color: #40444b;
-    color: #ffffff;
-    font-size: 14px;
-    box-sizing: border-box;
-  }
-  
-  /* Button Styling */
-  button {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 5px; /* Rounded corners for button */
-    background-color: #7289da; /* Blue button */
-    color: #ffffff;
-    font-size: 15px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    box-sizing: border-box;
-  }
-  
-  button:hover {
-    background-color: #5b6eae; /* Darker blue on hover */
-  }
-  
-  /* Result Box */
-  #result {
-    margin-top: 15px;
-    padding: 10px;
-    background-color: #40444b; /* Same as input background */
-    color: #ffcc4d; /* Soft yellow for result text */
-    border: 1px solid #555;
-    border-radius: 5px; /* Rounded corners for result box */
-    font-size: 14px;
-    word-wrap: break-word;
-    text-align: center;
-    box-sizing: border-box;
-  }
-  
+  font-family: Arial, sans-serif;
+  background-color: #2c2f33; /* Dark background color */
+  color: #671717; /* White text color */
+  padding: 20px;
+  width: 300px; /* Width of popup window */
+  box-sizing: border-box;
+  border-radius: 10px; /* Rounded corners for popup window */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Drop shadow for depth */
+}
+
+/* Title/Header Styling */
+h2 {
+  color: #7289da; /* Light blue color for title */
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* Input Fields Styling */
+input[type="password"], input[type="text"] {
+  width: 100%; /* Full width input fields */
+  padding: 10px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px; /* Rounded corners for input fields */
+  background-color: #40444b; /* Dark gray background for input fields */
+  color: #ffffff; /* White text color */
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+/* Styling for Password and Copy Button Container */
+.password-container {
+  display: flex;
+  align-items: center;
+  background-color: #40444b; /* Darker background */
+  border-radius: 5px;
+  padding: 5px;
+  margin-top: 10px;
+  box-sizing: border-box;
+}
+
+/* Styling for the Generated Password Box */
+#generated-password {
+  flex: 1; /* Take up available space */
+  padding: 10px;
+  background-color: #40444b;
+  color: #ffcc4d; /* Yellow color for text */
+  border: none;
+  font-size: 14px;
+  border-radius: 5px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+/* Styling for the Copy Button */
+#copy-button {
+  width: 30px;
+  height: 30px;
+  margin-left: 5px;
+  background: url('icons/copy-icon.png') no-repeat center center;
+  background-size: cover;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: opacity 0.3s;
+  z-index: 10;
+  opacity: 0.5;
+}
+
+/* Hover Effect for Copy Button */
+#copy-button:hover {
+  opacity: 0.8;
+}
+
+/* Centering Generate Password Button */
+#generate-button {
+  display: block;
+  margin: 10px auto 0 auto; /* Center horizontally with auto margins */
+  width: 80%; /* Adjust width as needed */
+  padding: 10px;
+  border: none;
+  border-radius: 5px; /* Rounded corners */
+  background-color: #7289da; /* Blue background color */
+  color: #ffffff; /* White text */
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.1s;
+  box-sizing: border-box;
+}
+
+/* Hover Effect for Generate Password Button */
+#generate-button:hover {
+  background-color: #5b6eae; /* Darker blue on hover */
+}
+
+/* Active/Pressed Effect for Generate Password Button */
+#generate-button:active {
+  transform: scale(0.98); /* Slight shrink effect */
+}

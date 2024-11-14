@@ -1,53 +1,64 @@
-// Utility function for SHA-256 hashing
-async function sha256(message) {
-    const msgBuffer = new TextEncoder().encode(message);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex;
+document.getElementById('generate-button').addEventListener('click', function() {
+  const masterPassword = document.getElementById('master-password').value;
+  const websiteUrl = document.getElementById('website-url').value;
+  const userName = document.getElementById('user-name').value;
+
+  if (!masterPassword || !websiteUrl || !userName) {
+    alert("Please fill out all fields.");
+    return;
   }
-  
-  // Function to derive a password using PBKDF2
-  async function generatePassword(basePassword, salt) {
-    const encoder = new TextEncoder();
-    const baseKey = await crypto.subtle.importKey(
-      "raw",
-      encoder.encode(basePassword),
-      "PBKDF2",
-      false,
-      ["deriveBits", "deriveKey"]
-    );
-  
-    const derivedKey = await crypto.subtle.deriveKey(
-      {
-        name: "PBKDF2",
-        salt: encoder.encode(salt),
-        iterations: 100000,
-        hash: "SHA-256"
-      },
-      baseKey,
-      { name: "AES-GCM", length: 256 },
-      true,
-      ["encrypt", "decrypt"]
-    );
-  
-    const derivedBits = await crypto.subtle.exportKey("raw", derivedKey);
-    const hashArray = Array.from(new Uint8Array(derivedBits));
-    const password = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return password.substring(0, 16);  // Adjust length as needed
-  }
-  
-  // Event listener for the Generate Password button
-  document.getElementById("generate").addEventListener("click", async () => {
-    const basePassword = document.getElementById("password").value;
-    const salt = document.getElementById("salt").value || "default_salt";  // Use a default salt if none is provided
-  
-    if (!basePassword) {
-      alert("Please enter a base password.");
-      return;
-    }
-  
-    const hashedPassword = await generatePassword(basePassword, salt);
-    document.getElementById("result").innerText = "Generated Password: " + hashedPassword;
+
+  const salt = websiteUrl + userName;
+
+  // Generate password using PBKDF2 and SHA-256
+  generatePassword(masterPassword, salt).then(password => {
+    document.getElementById('generated-password').value = password;
   });
+});
+
+function generatePassword(masterPassword, salt) {
+  return new Promise((resolve, reject) => {
+    // Use PBKDF2 to generate the key
+    const key = CryptoJS.PBKDF2(masterPassword, salt, { keySize: 256 / 32, iterations: 100000 });
+
+    // Hash the key with SHA-256
+    const hashedPassword = CryptoJS.SHA256(key);
+
+    // Convert the hashed password to Base64 and slice it to 13 characters
+    let password = hashedPassword.toString(CryptoJS.enc.Base64).slice(0, 13);
+
+    resolve(ensurePasswordComplexity(password));
+  });
+}
+
+function ensurePasswordComplexity(password) {
+  const lowerCase = /[a-z]/;
+  const upperCase = /[A-Z]/;
+  const number = /\d/;
+  const specialChar = /[!@#$%^&*(),.?":{}|<>]/;
+
+  // Ensure the password contains at least one of each required character type
+  const passwordArr = password.split('');
   
+  if (!lowerCase.test(password)) passwordArr.push('a');  // Add lowercase if missing
+  if (!upperCase.test(password)) passwordArr.push('A'); // Add uppercase if missing
+  if (!number.test(password)) passwordArr.push('1');    // Add a number if missing
+  if (!specialChar.test(password)) passwordArr.push('!'); // Add special character if missing
+
+  // Shuffle the password array to make sure the characters are mixed up
+  passwordArr.sort(() => Math.random() - 0.5);
+
+  // Join the array back into a string and ensure the password is exactly 13 characters long
+  password = passwordArr.join('').slice(0, 13);
+
+  return password;
+}
+
+// Function to copy password to clipboard
+document.getElementById('copy-button').addEventListener('click', function() {
+  const passwordField = document.getElementById('generated-password');
+  
+  // Select the text in the password field
+  passwordField.select();
+  document.execCommand('copy');
+});
